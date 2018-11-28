@@ -1,0 +1,12 @@
+{
+  "service": {
+    "service_account": "",
+    "service_account_secret": ""
+  },
+  "mesosphere_kubernetes_engine": {
+    "resources": {
+      "cpus": 1,
+      "mem": 1024
+    }
+  }
+}

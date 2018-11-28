@@ -1,0 +1,7 @@
+{
+  "service": {
+    "name": "kubernetes-cluster",
+    "service_account": "",
+    "service_account_secret": ""
+  }
+}
