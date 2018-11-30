@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 dcos security org service-accounts create -p public-key.pem -d 'Kubernetes service account' $1
 dcos security secrets create-sa-secret private-key.pem $1 $1/sa
 

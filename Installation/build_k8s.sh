@@ -7,7 +7,9 @@ mkdir dcos-tf-aws-demo && cd dcos-tf-aws-demo
 terraform init -input=false
 terraform plan -input=false -out=plan.out
 terraform apply -input=false plan.out
-export DCOS_MASTER="$(terraform output cluster-address )"
-export public_node="$(terraform output public-agents-loadbalancer)"
+
+export DCOS_MASTER="$(terraform output cluster-address | tr -dc '[:alnum:]')"
+export public_node="$(terraform output public-agents-loadbalancer| tr -dc '[:alnum:]')"
 dcos cluster setup --username bootstrapuser --password deleteme --no-check ${DCOS_MASTER}
+dcos node
 

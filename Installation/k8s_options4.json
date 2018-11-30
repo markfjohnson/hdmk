@@ -1,48 +1,59 @@
 {
   "service": {
-    "name": "kubernetes4",
+    "name": "kubernetes-cluster",
     "sleep": 1000,
-    "service_account": "kubernetes",
-    "service_account_secret": "kubernetes/sa",
+    "service_account": "kubernetes-cluster4",
+    "service_account_secret": "kubernetes-cluster4/sa",
     "virtual_network_name": "dcos",
-    "log_level": "INFO"
+    "log_level": "INFO",
+    "use_agent_docker_certs": false
   },
   "kubernetes": {
     "authorization_mode": "AlwaysAllow",
     "high_availability": false,
-    "use_private_docker_registry": false,
     "service_cidr": "10.100.0.0/16",
-    "network_provider": "dcos",
-    "calico": {
-      "calico_ipv4pool_cidr": "192.168.0.0/16",
-      "cni_mtu": 1400,
-      "ipv4pool_ipip": "Always",
-      "felix_ipinipmtu": 1420,
-      "felix_ipinipenabled": true
+    "control_plane_placement": "[[\"hostname\", \"UNIQUE\"]]",
+    "control_plane_reserved_resources": {
+      "cpus": 1.5,
+      "mem": 4096,
+      "disk": 10240
     },
-    "node_count": 3,
-    "node_placement": "",
-    "public_node_count": 0,
-    "public_node_placement": "",
-    "reserved_resources": {
+    "private_node_count": 1,
+    "private_node_placement": "",
+    "private_reserved_resources": {
       "kube_cpus": 2,
       "kube_mem": 2048,
       "kube_disk": 10240,
       "system_cpus": 1,
       "system_mem": 1024
     },
-    "public_reserved_resources": {},
-    "control_plane_mem": 4096,
-    "control_plane_disk": 10240,
-    "control_plane_placement": "[[\"hostname\", \"UNIQUE\"]]",
-    "control_plane_cpus": 1
+    "public_node_count": 0,
+    "public_node_placement": "",
+    "public_reserved_resources": {
+      "kube_cpus": 0.5,
+      "kube_mem": 512,
+      "kube_disk": 2048,
+      "system_cpus": 1,
+      "system_mem": 1024
+    }
+  },
+  "calico": {
+    "calico_ipv4pool_cidr": "192.168.0.0/16",
+    "cni_mtu": 1400,
+    "ip_autodetection_method": "can-reach=9.0.0.0",
+    "ipv4pool_ipip": "Always",
+    "felix_ipinipmtu": 1420,
+    "felix_ipinipenabled": true,
+    "typha": {
+      "enabled": false,
+      "replicas": 3
+    }
   },
   "etcd": {
-    "cpus": 1,
+    "cpus": 0.5,
     "mem": 1024,
     "data_disk": 3072,
     "wal_disk": 512,
     "disk_type": "ROOT"
   }
 }
-
