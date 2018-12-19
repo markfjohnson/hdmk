@@ -7,6 +7,7 @@
     * Kubernetes manager
     * Kubernetes cluster with the name 'kubernetes-cluster1'
 * kubectl is setup and able to return the nodes available to Kubernetes
+* The Docker image markfjohnson/python-kafka-k8s has been copied into your local repository if the cluster is airgapped.
 
 If any of the above are not installed in the cluster, then consult with the Installation README of this repository.
 
@@ -49,7 +50,7 @@ To begin you need to complete the following steps:
       }
       ```
       
-1. If in an air gapped environment, be sure to copy the Docker image **mesosphere/flink-generator:0.1** into your private local repository.
+1. If in an air gapped environment, be sure to copy the Docker image **mesosphere/flink-generator:0.1** into your private local repository.  Also, update the image name to reflect your private repository.
    **NOTE:** You may also have to modify the properties of the imagePullPolicy based on requirements established by your local repository.
    
 1. Copy the Data Generator yaml shown below into a file called **kafka-demo-generator.yaml**
@@ -123,7 +124,81 @@ To begin you need to complete the following steps:
     ]
     Marks-MacBook-Pro:kafka_hello_world markjohnson$
    ```
-   
+
+1. To view the data generated via the data generator tool by examining the pod logs execute the following command:
+   ```
+   Marks-MacBook-Pro:kafka_hello_world markjohnson$ kubectl logs flink-demo-generator-6d8dc87d48-rvhtf | more
+   time="2018-12-19T02:42:22Z" level=info msg="&sarama.ProducerMessage{Topic:"transactions", Key:sarama.Encoder(nil), Value:"2018-12-19T02:42:21Z;2;6;8394", Metadata:interface {}(nil), Offset:0, Partition:0, Timestamp:time.Time{sec:0, nsec:0, loc:(*time.Location)(nil)}, retries:0, flags:0}"
+   time="2018-12-19T02:42:23Z" level=info msg="&sarama.ProducerMessage{Topic:"transactions", Key:sarama.Encoder(nil), Value:"2018-12-19T02:42:23Z;4;0;3424", Metadata:interface {}(nil), Offset:1, Partition:0, Timestamp:time.Time{sec:0, nsec:0, loc:(*time.Location)(nil)}, retries:0, flags:0}"
+   time="2018-12-19T02:42:24Z" level=info msg="&sarama.ProducerMessage{Topic:"transactions", Key:sarama.Encoder(nil), Value:"2018-12-19T02:42:24Z;2;3;7734", Metadata:interface {}(nil), Offset:2, Partition:0, Timestamp:time.Time{sec:0, nsec:0, loc:(*time.Location)(nil)}, retries:0, flags:0}"
+   time="2018-12-19T02:42:25Z" level=info msg="&sarama.ProducerMessage{Topic:"transactions", Key:sarama.Encoder(nil), Value:"2018-12-19T02:42:25Z;4;6;2986", Metadata:interface {}(nil), Offset:3, Partition:0, Timestamp:time.Time{sec:0, nsec:0, loc:(*time.Location)(nil)}, retries:0, flags:0}"
+   time="2018-12-19T02:42:26Z" level=info msg="&sarama.ProducerMessage{Topic:"transactions", Key:sarama.Encoder(nil), Value:"2018-12-19T02:42:26Z;9;7;8684", Metadata:interface {}(nil), Offset:4, Partition:0, Timestamp:time.Time{sec:0, nsec:0, loc:(*time.Location)(nil)}, retries:0, flags:0}"
+   ```
    We have now completed the process of using a Kubernetes service calling a Kafka demo data generator and then posting those messages into a Kafka cluster managed by DC/OS and available to Kubernetes.
    
 ## Simple read from the "transactions" queue using a Kubernetes service
+This example extends upon the last by establishing a K8s service to read the contents of the "transaction" topic which is getting populated by the kafka demo generator.
+
+The requirements are the same as the prior example.
+
+1. Create a file with the following text to serve as the **transaction-consumer.yaml** Kubernetes Deployment.  The the full text for the file is available [here](https://raw.githubusercontent.com/markfjohnson/hdmk/master/kafka_hello_world/transaction-consumer.yaml) if you wish to download rather than copy it from below.
+    ```
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    metadata:
+      name: transaction-consumer
+    spec:
+      replicas: 1
+      template:
+      metadata:
+        name: transaction-consumer
+        labels:
+          app: transaction-consumer
+      spec:
+        containers:
+        - name: demo-consumer
+          image: markfjohnson/python-kafka-k8s
+          command: ["/usr/local/bin/python"]
+          imagePullPolicy: Always
+          args: ["-u","/python-k8s-samples/kafka_consumer.py", "--broker", "broker.kafka.l4lb.thisdcos.directory:9092"]
+    ```
+    
+1. Create the transaction-consumer deployment using the command:
+   ```
+   kubectl apply -f transaction-consumer.yaml
+   ```
+   
+1. Validate the pod has been created and is running correctly
+   ``` 
+   Marks-MacBook-Pro:kafka_hello_world markjohnson$ kubectl get pods
+   NAME                                    READY     STATUS    RESTARTS   AGE
+   flink-demo-generator-6d8dc87d48-rvhtf   1/1       Running   0          3h
+   transaction-consumer-9c599f68-zkcvs     1/1       Running   0          11m
+   
+   ```
+   
+1. Take the transaction-consumer-9c599f68-zkcvs  label from the get pods list and display the logs
+   ``` 
+   Marks-MacBook-Pro:kafka_hello_world markjohnson$ kubectl logs transaction-consumer-9c599f68-zkcvs | more
+
+   Message: b'2018-12-19T02:42:21Z;2;6;8394'
+   Message: b'2018-12-19T02:42:23Z;4;0;3424'
+   Message: b'2018-12-19T02:42:24Z;2;3;7734'
+   Message: b'2018-12-19T02:42:25Z;4;6;2986'
+   Message: b'2018-12-19T02:42:26Z;9;7;8684'
+   Message: b'2018-12-19T02:42:27Z;0;8;1901'
+   Message: b'2018-12-19T02:42:28Z;8;0;619'
+   Message: b'2018-12-19T02:42:29Z;8;1;8113'
+   Message: b'2018-12-19T02:42:30Z;4;6;1927'
+   Message: b'2018-12-19T02:42:31Z;0;3;7704'
+   Message: b'2018-12-19T02:42:32Z;7;3;3466'
+   Message: b'2018-12-19T02:42:34Z;1;6;471'
+   Message: b'2018-12-19T02:42:37Z;9;2;6680'
+   Message: b'2018-12-19T02:42:38Z;8;2;7388'
+   Message: b'2018-12-19T02:42:39Z;6;2;3215'
+   Message: b'2018-12-19T02:42:40Z;6;0;7840'
+   Message: b'2018-12-19T02:42:41Z;4;7;3383'
+   
+   ```
+   The output from the kubectl logs command will contain in a simplified format the data which was written originally by the data generator.
+    
