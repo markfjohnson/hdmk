@@ -2,9 +2,9 @@
 module "dcos" {
   source = "dcos-terraform/dcos/aws"
 
-  cluster_name        = "mjohnsonhdmk5"
+  cluster_name        = "mjohnsonk8s_sbc"
   num_masters        = "1"
-  num_private_agents = "10"
+  num_private_agents = "8"
   num_public_agents  = "1"
 
 
@@ -55,4 +55,7 @@ output "public-agents-loadbalancer" {
 provider "aws" {
   version = "1.43.2"
 }
+
+
+
 

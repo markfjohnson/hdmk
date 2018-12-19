@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -x
+eval $(maws li 110465657741_Mesosphere-PowerUser)
 export AWS_DEFAULT_REGION="us-west-2"
 #ssh-add ~/.ssh/id_rsa
-eval $(maws li 110465657741_Mesosphere-PowerUser)
+
 mkdir dcos-tf-aws-demo && cd dcos-tf-aws-demo
 terraform init -input=false
 terraform plan -input=false -out=plan.out

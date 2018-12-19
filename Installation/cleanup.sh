@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -x
+eval $(maws li 110465657741_Mesosphere-PowerUser)
 export AWS_DEFAULT_REGION="us-west-2"
 
 terraform destroy
