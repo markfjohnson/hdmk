@@ -16,7 +16,7 @@ consumer = KafkaConsumer(
 
 consumer.subscribe(["transactions"])
 
-print("E")
+
 for message in consumer:
     message = message.value
     print('Message: {}'.format(message))

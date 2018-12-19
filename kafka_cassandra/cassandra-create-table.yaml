@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cassandra-create-table
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: cassandra-create-table
+      labels:
+        app: cassandra-create-table
+    spec:
+      containers:
+      - name: cassandra-create-table
+        image: markfjohnson/python-kafka-k8s
+        command: ["/usr/local/bin/python"]
+        imagePullPolicy: Always
+        args: ["-u","/python-k8s-samples/create-table.py"]
+

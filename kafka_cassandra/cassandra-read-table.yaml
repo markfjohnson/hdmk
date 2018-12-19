@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cassandra-read-table
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: cassandra-read-table
+      labels:
+        app: cassandra-read-table
+    spec:
+      containers:
+      - name: cassandra-read-table
+        image: markfjohnson/python-kafka-k8s
+        command: ["/usr/local/bin/python"]
+        imagePullPolicy: Always
+        args: ["-u","/python-k8s-samples/cassandra-read-table.py"]
+

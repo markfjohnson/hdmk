@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cassandra-write-transactions
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: cassandra-write-transactions
+      labels:
+        app: cassandra-write-transactions
+    spec:
+      containers:
+      - name: cassandra-write-transactions
+        image: markfjohnson/python-kafka-k8s
+        command: ["/usr/local/bin/python"]
+        imagePullPolicy: Always
+        args: ["-u","/python-k8s-samples/cassandra-write-transactions.py"]
