@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "kubernetes-cluster2",
+    "name": "kubernetes-cluster3",
     "sleep": 1000,
     "service_account": "kubernetes-cluster2",
     "service_account_secret": "kubernetes-cluster2/sa",

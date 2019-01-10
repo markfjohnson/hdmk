@@ -4,13 +4,14 @@
 * A working DC/OS cluster with the following services installed
     * Kafka (3 brokers, kafka service name="kafka")
     * Kubernetes and Kafka are available to the CLI
-    * Kubernetes manager
-    * Kubernetes cluster with the name 'kubernetes-cluster1'
+    * Kubernetes manager installed
+    * Kubernetes cluster with the name 'kubernetes-cluster1' installed and verified with the command ```dcos kubernetes cluster debug plan status deploy --cluster-name=kubernetes-cluster1```
 * kubectl is setup and able to return the nodes available to Kubernetes
 * The Docker image markfjohnson/python-kafka-k8s has been copied into your local repository if the cluster is airgapped.
 
 If any of the above are not installed in the cluster, then consult with the Installation README of this repository.
 
+The source code for all the examples in 
 ## Run a Kubernetes Kafka producer pod
 This Kubernetes service will generate data and store that data within the Kafka service
 

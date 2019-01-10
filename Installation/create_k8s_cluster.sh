@@ -15,7 +15,7 @@ echo "==================================="
 echo " Begin Installing the 2 K8s Clusters"
 echo "==================================="
 sh ./create_k8s_svc_accnt.sh kubernetes-cluster2
-dcos kubernetes cluster create --yes --options=k8s_options2.json
+#dcos kubernetes cluster create --yes --options=k8s_options2.json
 
 echo "==================================="
 echo " Waiting for K8s to finish installation"
@@ -27,7 +27,8 @@ i=$(dcos kubernetes cluster debug plan status deploy --cluster-name=kubernetes-c
 sleep 10
 done
 echo "K8s Cluster 1 installed"
-dcos kubernetes cluster debug plan status deploy --cluster-name=kubernetes-cluster1
+
+
 dcos kubernetes cluster debug plan status deploy --cluster-name=kubernetes-cluster2
 
 echo "==================================="
@@ -46,14 +47,19 @@ dcos security org groups add_user superusers edge-lb-principal
 
 dcos package install --options=edge-lb-options.json edgelb --yes
 j="ABC"
-while [ $j -ne "pong" ]
+while [ "$j" != "pong" ]
 do
-j=$(dcos edgelb ping)
-sleep 10
+    sleep 10
+    j=$(dcos edgelb ping)
 done
 dcos edgelb create edgelb.json
-
-
+sleep 10
+#edge_cnt=0
+#while [ $edge_cnt -eq 0 ]
+#do
+#    sleep 5
+#    j=$(dcos edgelb list | grep -c "edgelb-kubernetes-cluster-proxy-basic")
+#done
 echo "==================================="
 echo " Edge Installation Complete"
 echo "==================================="

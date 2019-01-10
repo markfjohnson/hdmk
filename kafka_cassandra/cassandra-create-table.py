@@ -27,20 +27,4 @@ session.execute("""
             PRIMARY KEY (date)
         )
         """)
-print("Getting ready to insert rows into the Cassandra table:TRANSACTIONS_DATA")
-session.execute(
-    """
-    INSERT INTO transaction_data (trans_date, field1,field2,field3)
-    VALUES (%s, %s, %s, %s)
-    """,
-    ("John O'Reilly", 42, "1")
-)
 
-print("Cassandra row inserts into USERS table is now complete.")
-
-print(" ")
-print("Users Table Contents")
-print("Name, Age, ID")
-rows = session.execute('SELECT name, credits, user_id FROM users')
-for (name, credits, user_id) in rows:
-    print(name, credits, user_id)
