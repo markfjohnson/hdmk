@@ -15,7 +15,7 @@ echo "==================================="
 echo " Begin Installing the 2 K8s Clusters"
 echo "==================================="
 sh ./create_k8s_svc_accnt.sh kubernetes-cluster2
-#dcos kubernetes cluster create --yes --options=k8s_options2.json
+dcos kubernetes cluster create --yes --options=k8s_options2.json
 
 echo "==================================="
 echo " Waiting for K8s to finish installation"

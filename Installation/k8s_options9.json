@@ -1,9 +1,9 @@
 {
   "service": {
-    "name": "kubernetes-cluster1",
+    "name": "kubernetes-cluster9",
     "sleep": 1000,
-    "service_account": "kubernetes-cluster1",
-    "service_account_secret": "kubernetes-cluster1/sa",
+    "service_account": "kubernetes-cluster9",
+    "service_account_secret": "kubernetes-cluster9/sa",
     "virtual_network_name": "dcos",
     "log_level": "INFO",
     "use_agent_docker_certs": false

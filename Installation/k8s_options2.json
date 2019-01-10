@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "kubernetes-cluster3",
+    "name": "kubernetes-cluster2",
     "sleep": 1000,
     "service_account": "kubernetes-cluster2",
     "service_account_secret": "kubernetes-cluster2/sa",
@@ -22,7 +22,7 @@
     "private_node_placement": "",
     "private_reserved_resources": {
       "kube_cpus": 1,
-      "kube_mem": 2048,
+      "kube_mem": 1024,
       "kube_disk": 10240,
       "system_cpus": 1,
       "system_mem": 1024

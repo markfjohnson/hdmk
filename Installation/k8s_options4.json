@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "kubernetes-cluster",
+    "name": "kubernetes-cluster4",
     "sleep": 1000,
     "service_account": "kubernetes-cluster4",
     "service_account_secret": "kubernetes-cluster4/sa",
@@ -18,11 +18,11 @@
       "mem": 4096,
       "disk": 10240
     },
-    "private_node_count": 1,
+    "private_node_count": 6,
     "private_node_placement": "",
     "private_reserved_resources": {
-      "kube_cpus": 2,
-      "kube_mem": 2048,
+      "kube_cpus": 1,
+      "kube_mem": 1024,
       "kube_disk": 10240,
       "system_cpus": 1,
       "system_mem": 1024
