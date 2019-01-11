@@ -3,13 +3,15 @@ set -x
 dcos package install --yes dcos-enterprise-cli
 dcos security org service-accounts keypair private-key.pem public-key.pem
 
-dcos package install kubernetes --yes
+sh ./create_k8s_svc_accnt.sh kubernetes
+dcos package install kubernetes --yes  --options=kubernetes-engine.json
 sleep 60
 echo "==================================="
 echo " Begin Installing the 1 K8s Clusters"
 echo "==================================="
 sh ./create_k8s_svc_accnt.sh kubernetes-cluster1
-dcos kubernetes cluster create --yes --options=k8s_options1.json
+
+
 
 echo "==================================="
 echo " Begin Installing the 2 K8s Clusters"
