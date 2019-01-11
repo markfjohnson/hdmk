@@ -1,6 +1,7 @@
 {
   "service": {
     "name": "kubernetes-cluster1",
+    "region": "us-west-2",
     "sleep": 1000,
     "service_account": "kubernetes-cluster1",
     "service_account_secret": "kubernetes-cluster1/sa",
@@ -12,14 +13,13 @@
     "authorization_mode": "AlwaysAllow",
     "high_availability": false,
     "service_cidr": "10.100.0.0/16",
-    "control_plane_placement": "[[\"hostname\", \"UNIQUE\"]]",
     "control_plane_reserved_resources": {
-      "cpus": 1.5,
+      "cpus": 1,
       "mem": 4096,
       "disk": 10240
     },
-    "private_node_count": 6,
-    "private_node_placement": "",
+    "control_plane_placement": "[[\"hostname\",\"UNIQUE\"],[\"@zone\",\"GROUP_BY\",\"1\"]]",
+    "private_node_count": 1,
     "private_reserved_resources": {
       "kube_cpus": 1,
       "kube_mem": 1024,
@@ -27,15 +27,16 @@
       "system_cpus": 1,
       "system_mem": 1024
     },
+    "control_plane_placement": "[[\"hostname\",\"UNIQUE\"],[\"@zone\",\"GROUP_BY\",\"1\"]]",
     "public_node_count": 0,
-    "public_node_placement": "",
     "public_reserved_resources": {
-      "kube_cpus": 0.5,
       "kube_mem": 512,
       "kube_disk": 2048,
       "system_cpus": 1,
-      "system_mem": 1024
-    }
+      "system_mem": 1024,
+      "kube_cpus": 1
+    },
+    "control_plane_placement": "[[\"hostname\",\"UNIQUE\"],[\"@zone\",\"GROUP_BY\",\"1\"]]"
   },
   "calico": {
     "calico_ipv4pool_cidr": "192.168.0.0/16",
